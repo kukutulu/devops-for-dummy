@@ -1,0 +1,64 @@
+# pmt0014.click
+server {
+    listen 80;
+    server_name pmt0014.click;
+    return 301 https://pmt0014.click$request_uri;
+}
+
+server {
+    # listen on port 80
+    listen 80;
+    listen 443 ssl;
+    server_name pmt0014.click;
+    ssl_certificate /etc/nginx/certs/domain.crt;
+    ssl_certificate_key /etc/nginx/certs/domain.key;
+    # save logs here
+    # access_log /var/log/nginx/access.log compression;
+
+    # # where the root here
+    location / {
+        proxy_pass http://178.128.92.6:5000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    location /home {
+        proxy_pass http://178.128.92.6:4000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+
+# test.pmt0014.click
+server {
+    listen 80;
+    server_name test.pmt0014.click;
+    return 301 https://test.pmt0014.click$request_uri;
+}
+
+server {
+    # listen on port 80
+    listen 80;
+    listen 443 ssl;
+    server_name test.pmt0014.click;
+    ssl_certificate /etc/nginx/certs/domain.crt;
+    ssl_certificate_key /etc/nginx/certs/domain.key;
+    # save logs here
+    # access_log /var/log/nginx/access.log compression;
+
+    # # where the root here
+    location / {
+        proxy_pass http://178.128.92.6:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
